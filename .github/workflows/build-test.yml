@@ -4,10 +4,10 @@ name: Build and Test project
 on:
   push:
     branches:
-      - *
+      - '*'
   pull_request:
     branches:
-      - *
+      - '*'
 
 
 jobs:
@@ -31,6 +31,7 @@ jobs:
       - name: Build with Gradle
         id: build
         run: |
+          echo "executing ./gradlew clean build -x test"
           chmod +x ./gradlew
           ./gradlew clean build -x test
           
@@ -39,12 +40,13 @@ jobs:
   test:
     name: Gradle-Test
     runs-on: ubuntu-latest
-
     needs: build
+
     steps:
       - name: Test with Gradle
         id: test
         run: |
+          echo "executing ./gradlew test"
           ./gradlew test
 
 
@@ -53,6 +55,8 @@ jobs:
   docker-build-publish:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    needs: build
+
     steps:
       - name: Set up Docker
         id: setup_docker
