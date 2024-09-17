@@ -13,6 +13,16 @@ java {
     }
 }
 
+// Configure the fat JAR (default behavior of Spring Boot)
+bootJar {
+    archiveFileName = "${project.group}-${project.name}-${project.version}.jar"
+}
+
+// Ensure the plain JAR is not created
+tasks.named('jar') {
+    enabled = false
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor

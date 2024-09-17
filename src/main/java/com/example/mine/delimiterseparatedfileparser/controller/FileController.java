@@ -15,15 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RestController
 public class FileController {
-
 
     private final FileService fileService;
 
@@ -40,8 +35,8 @@ public class FileController {
 
     @PostMapping("/upload")
     public ResponseEntity<Resource> upload(@RequestParam("file") MultipartFile file,
-                                 @RequestParam("inputDelimiter") String inputDelimiter,
-                                 @RequestParam("outputDelimiter") String outputDelimiter) throws IOException {
+                                           @RequestParam("inputDelimiter") String inputDelimiter,
+                                           @RequestParam("outputDelimiter") String outputDelimiter) throws IOException {
 
 
         log.info("FileController: delimiter: {}", inputDelimiter);

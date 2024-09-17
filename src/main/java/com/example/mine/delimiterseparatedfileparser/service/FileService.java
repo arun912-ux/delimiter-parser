@@ -1,5 +1,6 @@
 package com.example.mine.delimiterseparatedfileparser.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -14,20 +15,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class FileService {
 
-    private static final Logger log = LoggerFactory.getLogger(FileService.class);
-
     public File parseFileAndChangeDelimiter(MultipartFile multipartFile, String inputDelimiter, String outputDelimiter) throws IOException {
 
-        File file = null;
         InputStream fileInputStream = null;
         Reader reader = null;
         try {
@@ -36,7 +34,8 @@ public class FileService {
             fileInputStream = multipartFile.getInputStream();
             reader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("FileService: error: {}", e.getMessage());
+            throw e;
         }
 
 
