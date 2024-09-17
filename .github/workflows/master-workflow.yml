@@ -1,0 +1,62 @@
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches:
+     - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: checkout and setup java
+      id: checkout
+      uses: .github/workflows/checkout-and-setup-java.yml
+      with:
+        branch_name: ${{ github.ref_name }}
+
+
+    - name: Build with Gradle
+      id: gradle-build
+      run: |
+        echo "./gradlew clean build -x test"
+        chmod +x gradlew
+        ./gradlew clean build -x test
+
+
+  test:
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: checkout and setup java
+        id: checkout
+        uses: .github/workflows/checkout-and-setup-java.yml
+        with:
+          branch_name: ${{ github.ref_name }}
+
+      - name: Test with Gradle
+        id: gradle-test
+        run: |
+          echo "./gradlew test"
+          chmod +x gradlew
+          ./gradlew test
+
+
+
+
+
+
+
+

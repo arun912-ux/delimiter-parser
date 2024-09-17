@@ -3,9 +3,7 @@ package com.example.mine.delimiterseparatedfileparser.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileServiceTest {
 
@@ -17,9 +15,9 @@ class FileServiceTest {
     }
 
     @Test
-    void shouldTestParseFileAndChangeDelimiter() throws IOException {
+    void shouldTestParseFileAndChangeDelimiter() {
 
-        fileService.parseFileAndChangeDelimiter(null, null, null);
+        assertThrows(NullPointerException.class, () -> fileService.parseFileAndChangeDelimiter(null, null, null));
 
     }
 
