@@ -19,7 +19,7 @@ jobs:
 
     - name: checkout and setup java
       id: checkout
-      uses: .github/workflows/checkout-and-setup-java.yml
+      uses: ./.github/workflows/checkout-and-setup-java.yml
       with:
         branch_name: ${{ github.ref_name }}
 
@@ -42,7 +42,7 @@ jobs:
 
       - name: checkout and setup java
         id: checkout
-        uses: .github/workflows/checkout-and-setup-java.yml
+        uses: ./.github/workflows/checkout-and-setup-java.yml
         with:
           branch_name: ${{ github.ref_name }}
 
