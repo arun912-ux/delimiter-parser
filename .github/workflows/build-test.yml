@@ -88,15 +88,16 @@ jobs:
         id: determine_image_tag
         run: |
           
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then     # It's a tag
-            TAG_NAME="${GITHUB_REF##refs/tags/}"            # Strip refs/tags/ prefix
-          else                                              # It's a commit SHA
-            TAG_NAME="${GITHUB_SHA:0:7}"                    # Use first 7 characters of commit SHA
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then                           # It's a tag
+            TAG_NAME="${GITHUB_REF##refs/tags/}"                                  # Strip refs/tags/ prefix
+          else                                                                    # It's a branch
+            BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | sed 's/\//-/g')      
+            echo "BRANCH_NAME=${BRANCH_NAME" 
+            TAG_NAME="${BRANCH_NAME}-${GITHUB_SHA:0:7}"                           # branch name - commit SHA
+            echo "TAG_NAME=${TAG_NAME}"
           fi
           
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | sed 's/\//-/g')
-          echo "BRANCH_NAME=${BRANCH_NAME}"
-          
+
           COMMIT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)    # Not needed
           echo "COMMIT_SHA=${COMMIT_SHA}"
           
@@ -104,7 +105,7 @@ jobs:
           REPO_NAME=${REPO_FULL_NAME##*/}
           echo "REPO_NAME=${REPO_NAME}"
           
-          IMAGE_TAG="${REPO_NAME}-${BRANCH_NAME}:${TAG_NAME}"
+          IMAGE_TAG="${REPO_NAME}:${TAG_NAME}"
           echo "docker image tag : IMAGE_TAG=${IMAGE_TAG}"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
           

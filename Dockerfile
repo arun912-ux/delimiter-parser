@@ -1,13 +1,17 @@
-FROM gradle:jdk17-alpine AS build
+FROM eclipse-temurin:17-jdk-alpine AS build
+
+USER 1000
 
 WORKDIR /app
 
 COPY . .
 
-RUN gradle clean build -x test
+RUN ./gradlew clean build -x test
 
 
 FROM eclipse-temurin:17-jre-alpine
+
+USER 1000
 
 WORKDIR /app
 

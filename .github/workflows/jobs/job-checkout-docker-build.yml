@@ -1,4 +1,3 @@
-
 name: Checkout and Docker Build
 
 on:
@@ -6,6 +5,14 @@ on:
     inputs:
       branch_name:
         description: 'branch name to checkout'
+        required: true
+        type: string
+      docker_username:
+        description: 'docker username'
+        required: true
+        type: string
+      docker_password:
+        description: 'docker password'
         required: true
         type: string
 
@@ -16,7 +23,7 @@ jobs:
 
     name: Docker Build Image and Push
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
@@ -34,9 +41,9 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-#          registry: '192.168.122.198:32000'
+#          username: ${{ inputs.docker_username }}
+#          password: ${{ inputs.docker_password }}
+          registry: docker.registry.local:32000
           logout: true
 
 
@@ -44,14 +51,15 @@ jobs:
         id: determine_image_tag
         run: |
           
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then     # It's a tag
-            TAG_NAME="${GITHUB_REF##refs/tags/}"            # Strip refs/tags/ prefix
-          else                                              # It's a commit SHA
-            TAG_NAME="${GITHUB_SHA:0:7}"                    # Use first 7 characters of commit SHA
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then                           # It's a tag
+            TAG_NAME="${GITHUB_REF##refs/tags/}"                                  # Strip refs/tags/ prefix
+          else                                                                    # It's a branch
+            BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | sed 's/\//-/g')      
+            echo "BRANCH_NAME=${BRANCH_NAME" 
+            TAG_NAME="${BRANCH_NAME}-${GITHUB_SHA:0:7}"                           # branch name - commit SHA
+            echo "TAG_NAME=${TAG_NAME}"
           fi
           
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | sed 's/\//-/g')
-          echo "BRANCH_NAME=${BRANCH_NAME}"
           
           COMMIT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-8)    # Not needed
           echo "COMMIT_SHA=${COMMIT_SHA}"
@@ -60,9 +68,10 @@ jobs:
           REPO_NAME=${REPO_FULL_NAME##*/}
           echo "REPO_NAME=${REPO_NAME}"
           
-          IMAGE_TAG="${REPO_NAME}-${BRANCH_NAME}:${TAG_NAME}"
+          IMAGE_TAG="${REPO_NAME}:${TAG_NAME}"
           echo "docker image tag : IMAGE_TAG=${IMAGE_TAG}"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+
 
 
       - name: Build and push
@@ -71,7 +80,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_TAG }}
+#          tags: ${{ inputs.docker_username }}/${{ env.IMAGE_TAG }}
+          tags: docker.registry.local:32000/${{ env.IMAGE_TAG }}
 
 
 
