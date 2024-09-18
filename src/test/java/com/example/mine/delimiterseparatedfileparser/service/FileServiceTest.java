@@ -2,8 +2,13 @@ package com.example.mine.delimiterseparatedfileparser.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.io.File;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FileServiceTest {
 
@@ -15,9 +20,11 @@ class FileServiceTest {
     }
 
     @Test
-    void shouldTestParseFileAndChangeDelimiter() {
+    void shouldTestParseFileAndChangeDelimiter() throws IOException {
 
-        assertThrows(NullPointerException.class, () -> fileService.parseFileAndChangeDelimiter(null, null, null));
+        MultipartFile multipartFile = new MockMultipartFile("test.csv", "test.csv", "text/csv", "test,test,test".getBytes());
+        File file = fileService.parseFileAndChangeDelimiter(multipartFile, ",", ";");
+        assertNotNull(file);
 
     }
 
