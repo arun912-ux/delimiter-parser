@@ -31,9 +31,10 @@ jobs:
   checkout-and-docker-build:
     needs: checkout-and-build
     uses: ./.github/workflows/job-checkout-docker-build.yml
-    with:
-      branch_name: ${{ github.ref_name }}
     secrets: inherit
+    with:
+      registry_url: docker.registry.local:32000
+      branch_name: ${{ github.ref_name }}
 
 
 
