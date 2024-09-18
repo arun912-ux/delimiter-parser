@@ -33,8 +33,7 @@ jobs:
     uses: ./.github/workflows/job-checkout-docker-build.yml
     with:
       branch_name: ${{ github.ref_name }}
-      docker_username: ${{ secrets.DOCKER_USERNAME }}
-      docker_password: ${{ secrets.DOCKER_PASSWORD }}
+    secrets: inherit
 
 
 
