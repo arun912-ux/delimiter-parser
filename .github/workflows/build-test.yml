@@ -92,7 +92,7 @@ jobs:
             TAG_NAME="${GITHUB_REF##refs/tags/}"                                  # Strip refs/tags/ prefix
           else                                                                    # It's a branch
             BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | sed 's/\//-/g')      
-            echo "BRANCH_NAME=${BRANCH_NAME" 
+            echo "BRANCH_NAME=${BRANCH_NAME}" 
             TAG_NAME="${BRANCH_NAME}-${GITHUB_SHA:0:7}"                           # branch name - commit SHA
             echo "TAG_NAME=${TAG_NAME}"
           fi

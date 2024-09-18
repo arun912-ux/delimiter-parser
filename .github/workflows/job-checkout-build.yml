@@ -1,5 +1,5 @@
 
-name: Checkout and Test
+name: .workflow checkout and build
 
 on:
   workflow_call:
@@ -37,12 +37,12 @@ jobs:
         run: |
           java -version
 
-      - name: Test Gradle
-        id: test-gradle
+      - name: Build Gradle
+        id: build-gradle
         run: |
-          echo "./gradlew clean test"
+          echo "./gradlew clean build -x test"
           chmod +x ./gradlew
-          ./gradlew clean test
+          ./gradlew clean build -x test
 
 
 

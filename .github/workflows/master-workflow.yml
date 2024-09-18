@@ -1,5 +1,5 @@
 
-name: Java CI with Gradle
+name: Master Branch Workflow
 
 on:
   push:
@@ -14,7 +14,7 @@ jobs:
 
   checkout-and-build:
     name: Checkout and Build
-    uses: ./.github/workflows/jobs/job-checkout-build.yml
+    uses: ./.github/workflows/job-checkout-build.yml
     with:
       branch_name: ${{ github.ref_name }}
 
@@ -22,7 +22,7 @@ jobs:
 
   checkout-and-test:
     needs: checkout-and-build
-    uses: ./.github/workflows/jobs/job-checkout-test.yml
+    uses: ./.github/workflows/job-checkout-test.yml
     with:
       branch_name: ${{ github.ref_name }}
 
@@ -30,7 +30,7 @@ jobs:
 
   checkout-and-docker-build:
     needs: checkout-and-build
-    uses: ./.github/workflows/jobs/job-checkout-docker-build.yml
+    uses: ./.github/workflows/job-checkout-docker-build.yml
     with:
       branch_name: ${{ github.ref_name }}
       docker_username: ${{ secrets.DOCKER_USERNAME }}
