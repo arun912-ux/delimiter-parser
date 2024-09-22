@@ -21,10 +21,9 @@ jobs:
 
     name: Docker Build Image and Push
 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
-
 
       - name: Setup Tailscale
         id: tailscale
@@ -48,7 +47,10 @@ jobs:
             [registry."${{ inputs.registry_url }}"]
               http = true
               insecure = true
-
+          buildkitd-config-inline: |
+            [registry."${{ inputs.registry_url }}"]
+              http = true
+              insecure = true
 
       - name: Login to Docker Registry
         uses: docker/login-action@v3
@@ -84,13 +86,6 @@ jobs:
           echo "docker image tag : IMAGE_TAG=${IMAGE_TAG}"
           echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
           echo "IMAGE_FULL_TAG=${{ inputs.registry_url }}/${IMAGE_TAG}" >> $GITHUB_ENV
-
-
-      - name: check docker config
-        id: check_docker_config
-        run: |
-          echo "cat /etc/docker/daemon.json"
-          cat /etc/docker/daemon.json
 
 
       - name: Build and push

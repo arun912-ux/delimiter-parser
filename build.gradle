@@ -8,6 +8,11 @@ plugins {
 group = 'com.example.mine'
 version = '0.0.1-SNAPSHOT'
 
+ext {
+    PROJECT_NAME = 'delimiter-parser'
+    PROJECT_VERSION = project.version
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -78,3 +83,19 @@ jacocoTestCoverageVerification {
         }
     }
 }
+
+
+//tasks.named('build') {
+//
+//}
+//
+//task generateHelmValues {
+//    doLast {
+//        def valuesFile = file("path/to/your/chart/values.yaml")
+//        valuesFile.text = """
+//project:
+//  name: "${project.name}"
+//  version: "${project.version}"
+//"""
+//    }
+//}
